@@ -31,21 +31,34 @@ const RuleForm = () => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 3, maxWidth: 600, mx: 'auto', mt: 4 }}>
-      <Typography variant="h5" gutterBottom>
+    <Paper 
+      elevation={2} 
+      sx={{ 
+        p: 4, 
+        maxWidth: 800, 
+        mx: 'auto', 
+        mt: 4, 
+        borderRadius: 2,
+        backgroundColor: '#f5f5f5',
+        border: '1px solid #e0e0e0',
+      }}
+    >
+      <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#1565c0' }}>
         Create New Rule
       </Typography>
       
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
+      {error && <Alert severity="error" sx={{ mb: 2, borderRadius: 1 }}>{error}</Alert>}
+      {success && <Alert severity="success" sx={{ mb: 2, borderRadius: 1 }}>{success}</Alert>}
 
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <TextField
           label="Rule Name"
           name="name"
           value={formData.name}
           onChange={handleChange}
           required
+          variant="outlined"
+          sx={{ backgroundColor: '#ffffff' }}
         />
         <TextField
           label="Rule String"
@@ -55,9 +68,21 @@ const RuleForm = () => {
           multiline
           rows={4}
           required
+          variant="outlined"
           helperText="Example: (age > 30 AND department = 'Sales') OR (salary > 50000)"
+          sx={{ backgroundColor: '#ffffff' }}
         />
-        <Button variant="contained" type="submit" sx={{ mt: 2 }}>
+        <Button 
+          variant="contained" 
+          type="submit" 
+          sx={{ 
+            mt: 2, 
+            backgroundColor: '#1565c0',
+            '&:hover': {
+              backgroundColor: '#0d47a1',
+            }
+          }}
+        >
           Create Rule
         </Button>
       </Box>

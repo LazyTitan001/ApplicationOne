@@ -8,13 +8,37 @@ import RuleEvaluator from './components/RuleEvaluator';
 const App = () => {
   return (
     <Router>
-      <AppBar position="static">
+      <AppBar position="static" elevation={0} sx={{ backgroundColor: '#e3f2fd', color: '#1565c0' }}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
             Rule Engine
           </Typography>
-          <Button color="inherit" component={Link} to="/">Create Rule</Button>
-          <Button color="inherit" component={Link} to="/evaluate">Evaluate</Button>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button 
+              component={Link} 
+              to="/" 
+              sx={{ 
+                color: '#1565c0',
+                '&:hover': {
+                  backgroundColor: 'rgba(21, 101, 192, 0.04)'
+                }
+              }}
+            >
+              Create Rule
+            </Button>
+            <Button 
+              component={Link} 
+              to="/evaluate" 
+              sx={{ 
+                color: '#1565c0',
+                '&:hover': {
+                  backgroundColor: 'rgba(21, 101, 192, 0.04)'
+                }
+              }}
+            >
+              Evaluate
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
 

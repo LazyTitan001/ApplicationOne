@@ -34,20 +34,31 @@ const RuleEvaluator = () => {
     <Box>
       <RuleList onRulesSelected={handleRulesCombined} />
       
-      <Paper elevation={3} sx={{ p: 3, maxWidth: 800, mx: 'auto', mt: 4 }}>
-        <Typography variant="h5" gutterBottom>
+      <Paper 
+        elevation={2} 
+        sx={{ 
+          p: 4, 
+          maxWidth: 800, 
+          mx: 'auto', 
+          mt: 4, 
+          borderRadius: 2,
+          backgroundColor: '#f5f5f5',
+          border: '1px solid #e0e0e0',
+        }}
+      >
+        <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#1565c0' }}>
           Evaluate Combined Rule
         </Typography>
 
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {error && <Alert severity="error" sx={{ mb: 2, borderRadius: 1 }}>{error}</Alert>}
         
         {combinedRule && (
-          <Alert severity="info" sx={{ mb: 2 }}>
+          <Alert severity="info" sx={{ mb: 2, borderRadius: 1 }}>
             Rules combined successfully! Ready for evaluation.
           </Alert>
         )}
         
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           <TextField
             label="User Data"
             multiline
@@ -55,24 +66,35 @@ const RuleEvaluator = () => {
             value={userData}
             onChange={(e) => setUserData(e.target.value)}
             helperText="Enter the data to evaluate (e.g., {'age': 35, 'department': 'Sales', ...})"
+            sx={{ backgroundColor: '#ffffff' }}
           />
           <Button 
             variant="contained" 
             onClick={handleEvaluate}
             disabled={!combinedRule}
+            sx={{ 
+              mt: 2, 
+              backgroundColor: '#1565c0',
+              '&:hover': {
+                backgroundColor: '#0d47a1',
+              },
+              '&:disabled': {
+                backgroundColor: '#bdbdbd',
+              }
+            }}
           >
             Evaluate
           </Button>
 
           {result !== null && (
-            <Alert severity={result ? "success" : "info"}>
+            <Alert severity={result ? "success" : "info"} sx={{ borderRadius: 1 }}>
               Result: {result.toString()}
             </Alert>
           )}
 
           <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
             Example Data Format:
-            <pre style={{ background: '#f5f5f5', padding: '10px', borderRadius: '4px' }}>
+            <pre style={{ background: '#e3f2fd', padding: '10px', borderRadius: '4px' }}>
               {JSON.stringify({
                 "age": 35,
                 "department": "Sales",
