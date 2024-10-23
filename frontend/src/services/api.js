@@ -2,11 +2,10 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:3000/api/rules';
 
-
 const api = {
   createRule: async (ruleData) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/create`, ruleData);
+      const response = await axios.post(`${API_BASE_URL}`, ruleData);
       return response.data;
     } catch (error) {
       const errorMessage = error.response?.data?.details ||
@@ -40,6 +39,42 @@ const api = {
     }
   },
 
+  updateRule: async (id, ruleData) => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/${id}`, ruleData);
+      return response.data;
+    } catch (error) {
+      const errorMessage = error.response?.data?.details ||
+                          error.response?.data?.error ||
+                          'Failed to update rule';
+      throw new Error(errorMessage);
+    }
+  },
+
+  updateRuleOperator: async (id, updateData) => {
+    try {
+      const response = await axios.put(`${API_BASE_URL}/${id}/operator`, updateData);
+      return response.data;
+    } catch (error) {
+      const errorMessage = error.response?.data?.details ||
+                          error.response?.data?.error ||
+                          'Failed to update rule operator';
+      throw new Error(errorMessage);
+    }
+  },
+
+  deleteRule: async (id) => {
+    try {
+      const response = await axios.delete(`${API_BASE_URL}/${id}`);
+      return response.data;
+    } catch (error) {
+      const errorMessage = error.response?.data?.details ||
+                          error.response?.data?.error ||
+                          'Failed to delete rule';
+      throw new Error(errorMessage);
+    }
+  },
+
   combineRules: async (ruleIds) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/combine`, { ruleIds });
@@ -63,7 +98,6 @@ const api = {
       throw new Error(errorMessage);
     }
   },
-
 };
 
 export default api;

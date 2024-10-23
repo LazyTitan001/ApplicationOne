@@ -1,4 +1,3 @@
-// components/RuleList.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   Paper, 
@@ -8,15 +7,26 @@ import {
   List, 
   ListItem, 
   ListItemText,
+  ListItemSecondaryAction,
   Checkbox,
-  Button
+  Button,
+  IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import api from '../services/api';
+import RuleEditor from './RuleEditor';
 
 const RuleList = ({ onRulesSelected }) => {
   const [rules, setRules] = useState([]);
   const [selectedRules, setSelectedRules] = useState([]);
   const [error, setError] = useState('');
+  const [editingRule, setEditingRule] = useState(null);
+  const [deleteConfirmRule, setDeleteConfirmRule] = useState(null);
 
   useEffect(() => {
     loadRules();
@@ -40,6 +50,30 @@ const RuleList = ({ onRulesSelected }) => {
     );
   };
 
+  const handleEditClick = (rule) => {
+    setEditingRule(rule);
+  };
+
+  const handleDeleteClick = (rule) => {
+    setDeleteConfirmRule(rule);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      await api.deleteRule(deleteConfirmRule._id);
+      await loadRules();
+      setDeleteConfirmRule(null);
+      setSelectedRules(prev => prev.filter(id => id !== deleteConfirmRule._id));
+    } catch (err) {
+      setError('Failed to delete rule');
+    }
+  };
+
+  const handleRuleUpdate = async () => {
+    await loadRules();
+    setEditingRule(null);
+  };
+
   const handleCombineRules = async () => {
     if (selectedRules.length < 2) {
       setError('Please select at least 2 rules to combine');
@@ -56,7 +90,7 @@ const RuleList = ({ onRulesSelected }) => {
   };
 
   return (
-    <Paper elevation={3} sx={{ p: 3, maxWidth: 600, mx: 'auto', mt: 4 }}>
+    <Paper elevation={3} sx={{ p: 3, maxWidth: 800, mx: 'auto', mt: 4 }}>
       <Typography variant="h5" gutterBottom>
         Select Rules to Combine
       </Typography>
@@ -65,9 +99,37 @@ const RuleList = ({ onRulesSelected }) => {
 
       <List>
         {rules.map((rule) => (
-          <ListItem key={rule._id} onClick={() => handleToggleRule(rule._id)}>
-            <Checkbox checked={selectedRules.includes(rule._id)} />
-            <ListItemText primary={rule.name} secondary={rule.description} />
+          <ListItem 
+            key={rule._id} 
+            sx={{
+              '&:hover': {
+                backgroundColor: 'rgba(0, 0, 0, 0.04)'
+              }
+            }}
+          >
+            <Checkbox 
+              checked={selectedRules.includes(rule._id)}
+              onChange={() => handleToggleRule(rule._id)}
+            />
+            <ListItemText 
+              primary={rule.name} 
+              secondary={rule.ruleString}
+            />
+            <ListItemSecondaryAction>
+              <IconButton 
+                edge="end" 
+                onClick={() => handleEditClick(rule)}
+                sx={{ mr: 1 }}
+              >
+                <EditIcon />
+              </IconButton>
+              <IconButton 
+                edge="end" 
+                onClick={() => handleDeleteClick(rule)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
           </ListItem>
         ))}
       </List>
@@ -81,6 +143,30 @@ const RuleList = ({ onRulesSelected }) => {
       >
         Combine Selected Rules
       </Button>
+
+      {editingRule && (
+        <RuleEditor
+          rule={editingRule}
+          onClose={() => setEditingRule(null)}
+          onUpdate={handleRuleUpdate}
+        />
+      )}
+
+      <Dialog
+        open={Boolean(deleteConfirmRule)}
+        onClose={() => setDeleteConfirmRule(null)}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete the rule "{deleteConfirmRule?.name}"?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteConfirmRule(null)}>Cancel</Button>
+          <Button onClick={handleDeleteConfirm} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   );
 };

@@ -1,5 +1,3 @@
-// src/models/Rule.js
-
 const mongoose = require('mongoose');
 
 const NodeSchema = new mongoose.Schema({
