@@ -1,5 +1,5 @@
 const Rule = require('../models/Rule');
-const { parseRule, combineRules, evaluateRule } = require('../utils/ruleParser');
+const { parseRule, combineRules, evaluateRule } = require('../utils/ruleUtils');
 
 const getAllRules = async (req, res) => {
   try {

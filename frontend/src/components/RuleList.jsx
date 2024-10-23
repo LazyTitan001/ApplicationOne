@@ -1,3 +1,4 @@
+// components/RuleList.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   Paper, 
@@ -25,6 +26,7 @@ const RuleList = ({ onRulesSelected }) => {
     try {
       const response = await api.getAllRules();
       setRules(response);
+      setError('');
     } catch (err) {
       setError('Failed to load rules');
     }
@@ -43,6 +45,7 @@ const RuleList = ({ onRulesSelected }) => {
       setError('Please select at least 2 rules to combine');
       return;
     }
+
     try {
       const combinedRule = await api.combineRules(selectedRules);
       onRulesSelected(combinedRule);
@@ -54,7 +57,7 @@ const RuleList = ({ onRulesSelected }) => {
 
   return (
     <Paper elevation={3} sx={{ p: 3, maxWidth: 600, mx: 'auto', mt: 4 }}>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h5" gutterBottom>
         Select Rules to Combine
       </Typography>
 
@@ -62,23 +65,16 @@ const RuleList = ({ onRulesSelected }) => {
 
       <List>
         {rules.map((rule) => (
-          <ListItem key={rule._id} dense button onClick={() => handleToggleRule(rule._id)}>
-            <Checkbox
-              edge="start"
-              checked={selectedRules.includes(rule._id)}
-              tabIndex={-1}
-              disableRipple
-            />
-            <ListItemText 
-              primary={rule.name}
-              secondary={rule.ruleString}
-            />
+          <ListItem key={rule._id} onClick={() => handleToggleRule(rule._id)}>
+            <Checkbox checked={selectedRules.includes(rule._id)} />
+            <ListItemText primary={rule.name} secondary={rule.description} />
           </ListItem>
         ))}
       </List>
 
-      <Button 
-        variant="contained" 
+      <Button
+        variant="contained"
+        color="primary"
         onClick={handleCombineRules}
         disabled={selectedRules.length < 2}
         sx={{ mt: 2 }}

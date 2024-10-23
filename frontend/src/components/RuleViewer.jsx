@@ -1,3 +1,4 @@
+// components/RuleViewer.jsx
 import React, { useState, useEffect } from 'react';
 import { 
   Paper, 
@@ -5,8 +6,7 @@ import {
   Box, 
   Alert,
   Card,
-  CardContent,
-  Button
+  CardContent
 } from '@mui/material';
 import api from '../services/api';
 
@@ -39,20 +39,20 @@ const RuleViewer = ({ ruleId }) => {
   }
 
   return (
-    <Paper elevation={3} sx={{ p: 3, maxWidth: 600, mx: 'auto', mt: 4 }}>
+    <Paper elevation={3} sx={{ p: 3, maxWidth: 800, mx: 'auto', mt: 4 }}>
       <Typography variant="h5" gutterBottom>
         Rule Details
       </Typography>
-      
-      <Card sx={{ mb: 2 }}>
+
+      <Card sx={{ mt: 2 }}>
         <CardContent>
           <Typography variant="h6">{rule.name}</Typography>
-          <Typography color="textSecondary" gutterBottom>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
             {rule.description}
           </Typography>
-          <Typography variant="body2" component="pre" sx={{ mt: 2 }}>
-            {JSON.stringify(rule.ast, null, 2)}
-          </Typography>
+          <Box sx={{ mt: 2, bgcolor: 'grey.100', p: 2, borderRadius: 1 }}>
+            <pre>{JSON.stringify(rule.ast, null, 2)}</pre>
+          </Box>
         </CardContent>
       </Card>
     </Paper>

@@ -1,3 +1,5 @@
+// components/RuleEvaluator.jsx
+
 import React, { useState } from 'react';
 import { TextField, Button, Paper, Typography, Box, Alert } from '@mui/material';
 import RuleList from './RuleList';
@@ -14,8 +16,16 @@ const RuleEvaluator = () => {
   };
 
   const handleEvaluate = async () => {
+    setError('');
+    setResult(null);
+
     if (!combinedRule) {
       setError('Please combine rules first');
+      return;
+    }
+
+    if (!userData.trim()) {
+      setError('Please enter data to evaluate');
       return;
     }
 
@@ -23,10 +33,12 @@ const RuleEvaluator = () => {
       const data = JSON.parse(userData);
       const response = await api.evaluateRule(combinedRule, data);
       setResult(response.result);
-      setError('');
     } catch (err) {
-      setError(err.message || 'Invalid JSON data');
-      setResult(null);
+      if (err instanceof SyntaxError) {
+        setError('Invalid JSON format. Please check your input data.');
+      } else {
+        setError(err.message || 'An error occurred');
+      }
     }
   };
 
@@ -70,7 +82,7 @@ const RuleEvaluator = () => {
           />
           <Button 
             variant="contained" 
-            onClick={handleEvaluate}
+            onClick={handleEvaluate}  // Added onClick handler here
             disabled={!combinedRule}
             sx={{ 
               mt: 2, 

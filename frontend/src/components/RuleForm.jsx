@@ -1,3 +1,4 @@
+// components/RuleForm.jsx
 import React, { useState } from 'react';
 import { TextField, Button, Paper, Typography, Box, Alert } from '@mui/material';
 import api from '../services/api';
@@ -19,69 +20,58 @@ const RuleForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    if (!formData.name.trim() || !formData.ruleString.trim()) {
+      setError('All fields are required');
+      return;
+    }
+
     try {
-      const result = await api.createRule(formData);
+      await api.createRule(formData);
       setSuccess('Rule created successfully!');
-      setError('');
       setFormData({ name: '', ruleString: '' });
     } catch (err) {
       setError(err.message || 'Failed to create rule');
-      setSuccess('');
     }
   };
 
   return (
-    <Paper 
-      elevation={2} 
-      sx={{ 
-        p: 4, 
-        maxWidth: 800, 
-        mx: 'auto', 
-        mt: 4, 
-        borderRadius: 2,
-        backgroundColor: '#f5f5f5',
-        border: '1px solid #e0e0e0',
-      }}
-    >
-      <Typography variant="h5" gutterBottom sx={{ fontWeight: 'bold', color: '#1565c0' }}>
+    <Paper elevation={3} sx={{ p: 3, maxWidth: 600, mx: 'auto', mt: 4 }}>
+      <Typography variant="h5" gutterBottom>
         Create New Rule
       </Typography>
-      
-      {error && <Alert severity="error" sx={{ mb: 2, borderRadius: 1 }}>{error}</Alert>}
-      {success && <Alert severity="success" sx={{ mb: 2, borderRadius: 1 }}>{success}</Alert>}
 
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+      {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
+
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
         <TextField
+          fullWidth
           label="Rule Name"
           name="name"
           value={formData.name}
           onChange={handleChange}
+          margin="normal"
           required
-          variant="outlined"
-          sx={{ backgroundColor: '#ffffff' }}
         />
         <TextField
+          fullWidth
           label="Rule String"
           name="ruleString"
           value={formData.ruleString}
           onChange={handleChange}
+          margin="normal"
+          required
           multiline
           rows={4}
-          required
-          variant="outlined"
-          helperText="Example: (age > 30 AND department = 'Sales') OR (salary > 50000)"
-          sx={{ backgroundColor: '#ffffff' }}
         />
         <Button 
-          variant="contained" 
-          type="submit" 
-          sx={{ 
-            mt: 2, 
-            backgroundColor: '#1565c0',
-            '&:hover': {
-              backgroundColor: '#0d47a1',
-            }
-          }}
+          type="submit"
+          variant="contained"
+          color="primary"
+          sx={{ mt: 2 }}
         >
           Create Rule
         </Button>
