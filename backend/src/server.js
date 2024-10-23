@@ -1,13 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const dotenv = require('dotenv');
 const ruleRoutes = require('./routes/ruleRoutes');
+
+// Load environment variables from .env file
+dotenv.config();
 
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: 'http://localhost:5173', // Your frontend URL
+  origin: process.env.FRONTEND_URL, // Your frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -17,7 +21,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Database connection
-mongoose.connect('mongodb+srv://admin:18nN5gWEd2zTHUev@cluster0.q5oto.mongodb.net/newtest', {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => {
