@@ -11,7 +11,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "https://relaxed-beignet-a1dc41.netlify.app/" ,// Your frontend URL
+  origin: process.env.FRONTEND_URL, // Your frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
